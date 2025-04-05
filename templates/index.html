@@ -70,7 +70,7 @@
             </div>
             
             <div class="logo">
-                <h1>CultureDrop</h1>
+                <a href="{{ url_for('home') }}">CultureDrop</a>
             </div>
             
             <div class="nav-icons">
@@ -106,26 +106,14 @@
         <section class="featured">
             <h2 class="section-title">Featured Items</h2>
             <div class="featured-grid">
+                {% for cloth in clothes %}
                 <div class="featured-item">
-                    <div class="featured-image"></div>
-                    <h3>Test</h3>
-                    <p>vedem maine vedem maine</p>
+                    <div class="featured-image" style="background-image: url('{{ cloth.image_path }}');"></div>
+                    <h3>{{ cloth.name }}</h3>
+                    <p>{{ cloth.description }}</p>
+                    <p>Price: {{ cloth.price }} RON</p>
                 </div>
-                <div class="featured-item">
-                    <div class="featured-image"></div>
-                    <h3>Test</h3>
-                    <p>vedem maine vedem maine</p>
-                </div>
-                <div class="featured-item">
-                    <div class="featured-image"></div>
-                    <h3>Test</h3>
-                    <p>vedem maine vedem maine</p>
-                </div>
-                <div class="featured-item">
-                    <div class="featured-image"></div>
-                    <h3>Test</h3>
-                    <p>vedem maine vedem maine</p>
-                </div>
+                {% endfor %}
             </div>
         </section>
     </main>

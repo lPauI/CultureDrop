@@ -96,7 +96,7 @@ header.hide {
     transition: background-color var(--transition-speed) ease;
 }
 
-.logo h1 {
+.logo a {
     font-size: 1.8rem;
     font-weight: 700;
     letter-spacing: 1px;
@@ -107,7 +107,7 @@ header.hide {
     font-style: normal;
 }
 
-.logo h1:hover {
+.logo a:hover {
     transform: scale(1.05);
     color: var(--accent-color);
 }
@@ -375,12 +375,18 @@ header.hide {
 }
 
 .featured-grid {
+    max-width: 1200px;
+    margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(4, 1fr); /* Afișează 4 elemente pe rând */
+    gap: 20px;
 }
 
 .featured-item {
+    width: 100%;
+    box-sizing: border-box;
+    /* border: 1px solid #ddd; */
+    padding: 10px;
     background-color: var(--card-bg);
     border-radius: 8px;
     overflow: hidden;
@@ -404,8 +410,8 @@ header.hide {
 }
 
 .featured-image {
+    width: 100%;
     height: 200px;
-    background-color: #ddd;
     background-size: cover;
     background-position: center;
     transition: transform 0.5s ease;

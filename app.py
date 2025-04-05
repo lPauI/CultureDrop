@@ -2,7 +2,9 @@ from flask import Flask, render_template
 
 from dotenv import load_dotenv
 
+from flask_wtf import CSRFProtect, FlaskForm
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.sql.expression import func
 
 import os
 
@@ -12,6 +14,7 @@ load_dotenv()
 # Initialize Flask app and configure database connection
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('FLASK_SECRET_KEY')
+csrf = CSRFProtect(app)
 
 mysql_user = os.getenv('MYSQL_USER')
 mysql_password = os.getenv('MYSQL_PASSWORD')
@@ -28,11 +31,15 @@ class Clothes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False)
     price = db.Column(db.Float, nullable=False)
+    image_path = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.Text, nullable=False)
 
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    clothes = Clothes.query.order_by(func.random()).all()
+    
+    return render_template('index.html', clothes=clothes)
 
 
 if __name__ == '__main__':
