@@ -41,12 +41,37 @@
         </div>
         
         <div class="mobile-nav-icons">
-            <a href="#"><i class="fas fa-user"></i></a>
+            <a href="#" id="mobileUserProfileIcon"><i class="fas fa-user"></i></a>
             <a href="#"><i class="fas fa-shopping-cart"></i></a>
             <a href="#"><i class="fas fa-heart"></i></a>
             <button class="dark-mode-toggle" id="mobileDarkModeToggle">
                 <i class="fas fa-moon"></i>
             </button>
+        </div>
+    </div>
+
+    <!-- Profile popup -->
+    <div class="profile-popup" id="profilePopup">
+        <div class="profile-popup-content">
+            <div class="profile-popup-header">
+                <h3>Profil</h3>
+                <button class="popup-close" id="popupClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="profile-popup-body">
+                {% if session.user_id %}
+                <div class="profile-info">
+                    <p>Conectat ca: <strong>{{ session.email }}</strong></p>
+                </div>
+                <a href="{{ url_for('logout') }}" class="logout-btn">Deconectare</a>
+                {% else %}
+                <div class="login-register-links">
+                    <a href="{{ url_for('login') }}" class="popup-btn">Autentificare</a>
+                    <a href="{{ url_for('register') }}" class="popup-btn secondary">Înregistrare</a>
+                </div>
+                {% endif %}
+            </div>
         </div>
     </div>
 
@@ -74,7 +99,7 @@
             </div>
             
             <div class="nav-icons">
-                <a href="#" class="icon-link"><i class="fas fa-user"></i></a>
+                <a href="#" class="icon-link" id="userProfileIcon"><i class="fas fa-user"></i></a>
                 <a href="#" class="icon-link"><i class="fas fa-shopping-cart"></i></a>
                 <a href="#" class="icon-link"><i class="fas fa-heart"></i></a>
                 <button class="dark-mode-toggle" id="darkModeToggle">
@@ -224,7 +249,33 @@
             lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
         });
 
-        
+        // User profile popup functionality
+        const profilePopup = document.getElementById('profilePopup');
+        const userProfileIcon = document.getElementById('userProfileIcon');
+        const mobileUserProfileIcon = document.getElementById('mobileUserProfileIcon');
+        const popupClose = document.getElementById('popupClose');
+
+        // Function to open profile popup
+        function openProfilePopup(e) {
+            e.preventDefault();
+            profilePopup.classList.add('active');
+            menuOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Function to close profile popup
+        function closeProfilePopup() {
+            profilePopup.classList.remove('active');
+            menuOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Event listeners for profile popup
+        userProfileIcon.addEventListener('click', openProfilePopup);
+        mobileUserProfileIcon.addEventListener('click', openProfilePopup);
+        popupClose.addEventListener('click', closeProfilePopup);
+        menuOverlay.addEventListener('click', closeProfilePopup);
+
         document.addEventListener('DOMContentLoaded', function() {
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {

@@ -5,16 +5,33 @@
   <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body class="register-page">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flashes">
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
   <div class="register-container">
     <h2>Register</h2>
     <form method="POST">
-      <div class="name-row">
-        <input type="text" name="First-Name" placeholder="First Name" required>
-        <input type="text" name="Last-Name" placeholder="Last Name" required>
+      {{ form.hidden_tag() }}
+      
+      <div>
+        {{ form.username.label }}<br>
+        {{ form.username(size=32, placeholder="Username") }}
       </div>
-      <input type="text" name="username" placeholder="Email" required>
-      <input type="password" name="password" placeholder="Password" required>
-      <input type="password" name="confirm-pass" placeholder="Confirm Password" required>
+      <div>
+        {{ form.email.label }}<br>
+        {{ form.email(size=32, placeholder="Email") }}
+      </div>
+      <div>
+        {{ form.password.label }}<br>
+        {{ form.password(size=32, placeholder="Password") }}
+      </div>
+
       <div class="terms">
         <input type="checkbox" id="terms" required>
         <label for="terms">
@@ -22,7 +39,7 @@
         </label>
       </div>
 
-      <button type="submit">Register</button>
+      <button type="submit">{{ form.submit.label.text }}</button>
     </form>
   </div>
 </body>
