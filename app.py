@@ -238,6 +238,10 @@ def create_order():
 def song():
     return render_template('song.html')
 
+@app.route('/fv')
+def fv():
+    return render_template('favorites.html')
+
 
 if __name__ == '__main__':
     with app.app_context():
