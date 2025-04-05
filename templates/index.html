@@ -4,28 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CultureDrop - Music & Fashion Concept Shop</title>
-    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="/static/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <header>
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator"></div>
+
+    <!-- Menu overlay -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- Mobile menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <h3>Menu</h3>
+            <button class="mobile-menu-close" id="mobileMenuClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="mobile-nav-items">
+            <div class="mobile-dropdown" id="clothesDropdown">
+                <button class="mobile-dropdown-toggle">
+                    Clothes <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="mobile-dropdown-menu">
+                    <a href="#">Male</a>
+                    <a href="#">Female</a>
+                </div>
+            </div>
+            
+            <a href="#" class="mobile-nav-link">Music</a>
+        </div>
+        
+        <div class="mobile-nav-icons">
+            <a href="#"><i class="fas fa-user"></i></a>
+            <a href="#"><i class="fas fa-shopping-cart"></i></a>
+            <a href="#"><i class="fas fa-heart"></i></a>
+            <button class="dark-mode-toggle" id="mobileDarkModeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </div>
+
+    <header id="header">
         <nav class="navbar">
-            <div class="nav-left">
-                <div class="dropdown">
-                    <button class="dropbtn">Clothes</button>
-                    <div class="dropdown-content">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="nav-menu">
+                <div class="nav-item">
+                    <a href="#" class="nav-link">Clothes</a>
+                    <div class="dropdown-menu">
                         <a href="#">Male</a>
                         <a href="#">Female</a>
                     </div>
                 </div>
-                <a href="#" class="nav-link">Music</a>
+                <div class="nav-item">
+                    <a href="#" class="nav-link">Music</a>
+                </div>
             </div>
             
             <div class="logo">
                 <h1>CultureDrop</h1>
             </div>
             
-            <div class="nav-right">
+            <div class="nav-icons">
                 <a href="#" class="icon-link"><i class="fas fa-user"></i></a>
                 <a href="#" class="icon-link"><i class="fas fa-shopping-cart"></i></a>
                 <a href="#" class="icon-link"><i class="fas fa-heart"></i></a>
@@ -36,6 +81,10 @@
         </nav>
     </header>
 
+    <!-- Back to top button -->
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
 
     <!-- hero -->
     <main>
@@ -50,7 +99,6 @@
             </div>
         </section>
     <!-- hero -->
-
 
         <section class="featured">
             <h2 class="section-title">Featured Collections</h2>
@@ -84,27 +132,113 @@
             <p>&copy; 2025 CultureDrop. All rights reserved.</p>
         </div>
     </footer>
-    <!--  -->
 
     <script>
+        // Dark mode toggle
         const toggle = document.getElementById('darkModeToggle');
+        const mobileToggle = document.getElementById('mobileDarkModeToggle');
       
-        toggle.addEventListener('click', () => {
-          // Toggle pe root (html elementul) sau body – tu alegi, dar html e mai sigur
-          document.documentElement.classList.toggle('dark-mode');
-      
-          // Schimbă și iconița din buton (opțional)
-          const icon = toggle.querySelector('i');
-          if (document.documentElement.classList.contains('dark-mode')) {
-            icon.classList.remove('fa-moon');
-            icon.classList.add('fa-sun');
-          } else {
-            icon.classList.remove('fa-sun');
-            icon.classList.add('fa-moon');
-          }
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark-mode');
+            const mainIcon = toggle.querySelector('i');
+            const mobileIcon = mobileToggle.querySelector('i');
+            
+            if (document.documentElement.classList.contains('dark-mode')) {
+                mainIcon.classList.remove('fa-moon');
+                mainIcon.classList.add('fa-sun');
+                mobileIcon.classList.remove('fa-moon');
+                mobileIcon.classList.add('fa-sun');
+            } else {
+                mainIcon.classList.remove('fa-sun');
+                mainIcon.classList.add('fa-moon');
+                mobileIcon.classList.remove('fa-sun');
+                mobileIcon.classList.add('fa-moon');
+            }
+        }
+        
+        toggle.addEventListener('click', toggleDarkMode);
+        mobileToggle.addEventListener('click', toggleDarkMode);
+
+        // Mobile menu functionality
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuOverlay = document.getElementById('menuOverlay');
+        const mobileMenuClose = document.getElementById('mobileMenuClose');
+        const clothesDropdown = document.getElementById('clothesDropdown');
+        
+        menuToggle.addEventListener('click', function() {
+            mobileMenu.classList.add('active');
+            menuOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
         });
-      </script>
-      
-    
+        
+        function closeMenu() {
+            mobileMenu.classList.remove('active');
+            menuOverlay.classList.remove('active');
+            document.body.style.overflow = ''; 
+        }
+        
+        mobileMenuClose.addEventListener('click', closeMenu);
+        menuOverlay.addEventListener('click', closeMenu);
+        clothesDropdown.addEventListener('click', function(e) {
+            e.stopPropagation();
+            this.classList.toggle('active');
+        });
+
+        // Scroll indicator
+        window.addEventListener('scroll', function() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.querySelector('.scroll-indicator').style.width = scrolled + '%';
+            
+            // Show/hide back to top button
+            const backToTop = document.getElementById('backToTop');
+            if (winScroll > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        // Back to top button
+        document.getElementById('backToTop').addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Navbar hide/show on scroll
+        let lastScrollTop = 0;
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('header');
+            const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (currentScroll > lastScrollTop && currentScroll > 200) {
+                header.classList.add('hide');
+            } else {
+                header.classList.remove('hide');
+            }
+            lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+        });
+
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.section-title').forEach(title => {
+                observer.observe(title);
+            });
+            document.querySelectorAll('.featured-item').forEach(item => {
+                observer.observe(item);
+            });
+        });
+    </script>
 </body>
 </html>
