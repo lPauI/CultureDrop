@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Checkout - CultureDrop</title>
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <style>
     :root {
         --primary-color: #1a1a1a;
@@ -820,37 +821,28 @@
         <div class="checkout-grid">
             <div class="checkout-left">
                 <div class="cart-items">
+                    {% for cart_item in cart_items %}
                     <div class="cart-item">
-                        <div class="item-image" style="background-image: url('https://images.unsplash.com/photo-1523398002811-999ca8dec234?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');"></div>
+                        <div class="item-image" style="background-image: url('{{ cart_item.clothes.image_path }}');"></div>
                         <div class="item-details">
-                            <div class="item-name">Urban Streetwear Hoodie</div>
-                            <div class="item-price">$123</div>
+                            <div class="item-name">{{ cart_item.clothes.name }}</div>
+                            <div class="item-price">${{ cart_item.clothes.price }}</div>
                             <div class="item-quantity">
-                                <button class="quantity-btn" onclick="updateQuantity('decrease', 0)">-</button>
-                                <input type="number" class="quantity-input" value="1" min="1" max="10" id="quantity-0">
-                                <button class="quantity-btn" onclick="updateQuantity('increase', 0)">+</button>
+                                <button class="quantity-btn" onclick="updateQuantity('decrease', {{ cart_item.id }})">-</button>
+                                <input type="number" class="quantity-input" value="{{ cart_item.quantity }}" min="1" max="10" id="quantity-{{ cart_item.id }}">
+                                <button class="quantity-btn" onclick="updateQuantity('increase', {{ cart_item.id }})">+</button>
                             </div>
                         </div>
-                        <button class="item-remove" onclick="removeItem(0)">
-                            <i class="fas fa-trash"></i>
-                        </button>
+                        <form action="{{ url_for('remove_from_cart', cart_item_id=cart_item.id) }}" method="POST" style="display:inline;">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button class="item-remove" type="submit" title="Șterge produsul">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
                     </div>
-                    
-                    <div class="cart-item">
-                        <div class="item-image" style="background-image: url('https://images.unsplash.com/photo-1483412033650-1015ddeb83d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');"></div>
-                        <div class="item-details">
-                            <div class="item-name">Vintage Hip-Hop Tee</div>
-                            <div class="item-price">$123</div>
-                            <div class="item-quantity">
-                                <button class="quantity-btn" onclick="updateQuantity('decrease', 1)">-</button>
-                                <input type="number" class="quantity-input" value="1" min="1" max="10" id="quantity-1">
-                                <button class="quantity-btn" onclick="updateQuantity('increase', 1)">+</button>
-                            </div>
-                        </div>
-                        <button class="item-remove" onclick="removeItem(1)">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
+                    {% else %}
+                    <p>Your cart is empty.</p>
+                    {% endfor %}
                 </div>
                 
                 <div class="shipping-form">
@@ -915,43 +907,30 @@
             
             <div class="checkout-right">
                 <div class="order-summary">
-                    <h2 class="summary-title">Order Summary</h2>
-                    
-                    <div class="summary-row">
-                        <span>Subtotal</span>
-                        <span id="subtotal">$109.97</span>
-                    </div>
-                    
-                    <div class="summary-row">
-                        <span>Shipping</span>
-                        <span id="shipping">$5.99</span>
-                    </div>
-                    
-                    <div class="summary-row">
-                        <span>Tax</span>
-                        <span id="tax">$10.99</span>
-                    </div>
-                    
-                    <div class="summary-row total">
-                        <span>Total</span>
-                        <span id="total">$126.95</span>
-                    </div>
-                    
-                    <button class="checkout-btn" id="checkout-btn">
-                        <i class="fas fa-lock"></i> Proceed to Payment
-                    </button>
-                    
-                    <a href="index.html" class="continue-shopping">
-                        <i class="fas fa-arrow-left"></i> Continue Shopping
-                    </a>
-                    
-                    <div class="payment-methods">
-                        <div class="payment-method"><i class="fab fa-cc-visa"></i></div>
-                        <div class="payment-method"><i class="fab fa-cc-mastercard"></i></div>
-                        <div class="payment-method"><i class="fab fa-cc-amex"></i></div>
-                        <div class="payment-method"><i class="fab fa-cc-paypal"></i></div>
+                    <h3>Order Summary</h3>
+                    <div class="summary-details">
+                        <div class="summary-row">
+                            <span>Subtotal:</span>
+                            <span>${{ total_price }}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Tax (5%):</span>
+                            <span>${{ (total_price * 0.05)|round(2) }}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Total:</span>
+                            <span>${{ (total_price * 1.05)|round(2) }}</span>
+                        </div>
                     </div>
                 </div>
+                
+                <button class="checkout-btn" id="checkout-btn">
+                    <i class="fas fa-lock"></i> Proceed to Payment
+                </button>
+                
+                <a href="{{ url_for('home') }}" class="continue-shopping">
+                    <i class="fas fa-arrow-left"></i> Continue Shopping
+                </a>
             </div>
         </div>
     </main>

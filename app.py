@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, flash, session
+from flask import Flask, render_template, redirect, url_for, flash, session, request, jsonify
 
 from dotenv import load_dotenv
 
@@ -63,6 +63,14 @@ class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
+
+
+class Cart(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    clothes_id = db.Column(db.Integer, db.ForeignKey('clothes.id'), nullable=False)
+    quantity = db.Column(db.Integer, default=1)
+    clothes = db.relationship('Clothes', backref='cart_items')
 
 
 @app.route('/')
@@ -133,6 +141,64 @@ def logout():
     session.pop('email', None)
     flash('Te-ai deconectat cu succes!', 'success')
     return redirect(url_for('home'))
+
+
+@app.route("/checkout")
+def checkout():
+    if 'user_id' not in session:
+        flash('You must be logged in to access the checkout page.', 'warning')
+        return redirect(url_for('login'))
+    
+    user_id = session['user_id']
+    cart_items = Cart.query.filter_by(user_id=user_id).all()
+    total_price = sum(item.quantity * item.clothes.price for item in cart_items)
+    
+    return render_template('checkout.html', cart_items=cart_items, total_price=total_price)
+
+
+@app.route('/add_to_cart', methods=['POST'])
+def add_to_cart():
+    if 'user_id' not in session:
+        flash('You need to login for this action.', 'warning')
+        return redirect(url_for('login'))
+        
+    product_id = request.form.get('product_id')
+    if not product_id:
+        flash('The product was not found.', 'warning')
+        return redirect(url_for('home'))
+    
+    user_id = session['user_id']
+    
+    # Check if product is already in cart
+    cart_item = Cart.query.filter_by(user_id=user_id, clothes_id=product_id).first()
+    if cart_item:
+        cart_item.quantity += 1
+    else:
+        new_item = Cart(user_id=user_id, clothes_id=product_id, quantity=1)
+        db.session.add(new_item)
+    
+    db.session.commit()
+    flash('The product was added to the cart!', 'success')
+    return redirect(url_for('home'))
+
+
+@app.route('/remove_from_cart/<int:cart_item_id>', methods=['POST'])
+def remove_from_cart(cart_item_id):
+    if 'user_id' not in session:
+        flash('You need to login for this action.', 'warning')
+        return redirect(url_for('login'))
+        
+    user_id = session['user_id']
+    cart_item = Cart.query.filter_by(id=cart_item_id, user_id=user_id).first()
+    
+    if cart_item:
+        db.session.delete(cart_item)
+        db.session.commit()
+        flash('The product was removed from the cart!', 'success')
+    else:
+        flash('The product was not found.', 'warning')
+        
+    return redirect(url_for('checkout'))
 
 
 if __name__ == '__main__':

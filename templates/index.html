@@ -139,9 +139,13 @@
                     <p>Price: {{ cloth.price }} RON</p>
                     <!-- add to cart -->
                     <div class="item-actions">
-                        <button class="buy-button">
-                            <i class="fas fa-shopping-cart"></i> Add to Cart
-                        </button>
+                        <form action="{{ url_for('add_to_cart') }}" method="POST">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <input type="hidden" name="product_id" value="{{ cloth.id }}">
+                            <button class="buy-button" type="submit">
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                            </button>
+                        </form>
                         <button class="wishlist-button">
                             <i class="fas fa-heart"></i>
                         </button>
