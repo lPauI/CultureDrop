@@ -2025,3 +2025,7 @@ input:focus, button:focus {
         flex-wrap: wrap;
     }
 }
+html {
+    scroll-behavior: smooth;
+  }
+  
