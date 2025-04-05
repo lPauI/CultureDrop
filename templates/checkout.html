@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Checkout - CultureDrop</title>
 <meta name="csrf-token" content="{{ csrf_token() }}">
+<link rel="stylesheet" href="/static/css/style.css">
 <style>
     :root {
         --primary-color: #1a1a1a;
@@ -781,39 +782,7 @@
         </div>
     </div>
 
-    <header id="header">
-        <nav class="navbar">
-            <button class="menu-toggle" id="menuToggle">
-                <i class="fas fa-bars"></i>
-            </button>
-            
-            <div class="nav-menu">
-                <div class="nav-item">
-                    <a href="#" class="nav-link">Clothes</a>
-                    <div class="dropdown-menu">
-                        <a href="#">Male</a>
-                        <a href="#">Female</a>
-                    </div>
-                </div>
-                <div class="nav-item">
-                    <a href="#" class="nav-link">Music</a>
-                </div>
-            </div>
-            
-            <div class="logo">
-                <h1>CultureDrop</h1>
-            </div>
-            
-            <div class="nav-icons">
-                <a href="#" class="icon-link"><i class="fas fa-user"></i></a>
-                <a href="#" class="icon-link"><i class="fas fa-shopping-cart"></i></a>
-                <a href="#" class="icon-link"><i class="fas fa-heart"></i></a>
-                <button class="dark-mode-toggle" id="darkModeToggle">
-                    <i class="fas fa-moon"></i>
-                </button>
-            </div>
-        </nav>
-    </header>
+    {% include 'header.html' %}
 
     <main class="checkout-container">
         <h1 class="page-title">Your Shopping Cart</h1>
@@ -935,11 +904,7 @@
         </div>
     </main>
 
-    <footer>
-        <div class="footer-bottom">
-            <p>&copy; 2025 CultureDrop. All rights reserved.</p>
-        </div>
-    </footer>
+    {% include 'footer.html' %}
 
     <script>
         // Dark mode toggle
