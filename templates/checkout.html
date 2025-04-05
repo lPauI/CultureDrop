@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout - CultureDrop</title>
+<style>
+    :root {
+        --primary-color: #1a1a1a;
+        --secondary-color: #f5f5f5;
+        --accent-color: #a60019;
+        --text-color: #333;
+        --bg-color: #fff;
+        --nav-bg: #fff;
+        --card-bg: #f9f9f9;
+        --footer-bg: #1a1a1a;
+        --footer-text: #f5f5f5;
+        --border-color: #e0e0e0;
+        --navbar-height: 70px;
+        --transition-speed: 0.3s;
+        --animation-duration: 0.8s;
+    }
+
+    .dark-mode {
+        --primary-color: #f5f5f5;
+        --secondary-color: #1a1a1a;
+        --accent-color: #a60019;
+        --text-color: #f5f5f5;
+        --bg-color: #121212;
+        --nav-bg: #1a1a1a;
+        --card-bg: #2a2a2a;
+        --footer-bg: #0a0a0a;
+        --footer-text: #f5f5f5;
+        --border-color: #333;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideInLeft {
+        from { opacity: 0; transform: translateX(-50px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes slideInRight {
+        from { opacity: 0; transform: translateX(50px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+
+    body {
+        font-family: "Roboto", sans-serif;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+        transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+        overflow-x: hidden;
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    /* Header and Navigation */
+    header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        transition: transform var(--transition-speed) ease;
+    }
+
+    header.hide {
+        transform: translateY(-100%);
+    }
+
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 5%;
+        background-color: var(--nav-bg);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        height: var(--navbar-height);
+        transition: background-color var(--transition-speed) ease;
+    }
+
+    .logo h1 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        color: var(--primary-color);
+        transition: color var(--transition-speed) ease, transform var(--transition-speed) ease;
+        font-family: "UnifrakturCook", cursive;
+    }
+
+    .logo h1:hover {
+        transform: scale(1.05);
+        color: var(--accent-color);
+    }
+
+    .nav-menu {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .nav-item {
+        position: relative;
+    }
+
+    .nav-link {
+        font-weight: 700;
+        padding: 0.5rem 0;
+        position: relative;
+        transition: color var(--transition-speed) ease;
+        display: block;
+    }
+
+    .nav-link:after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: 0;
+        left: 0;
+        background-color: var(--accent-color);
+        transition: width var(--transition-speed) ease;
+    }
+
+    .nav-link:hover:after {
+        width: 100%;
+    }
+
+    .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        min-width: 160px;
+        background-color: var(--nav-bg);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        border-radius: 4px;
+        overflow: hidden;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(10px);
+        transition: opacity var(--transition-speed) ease, 
+                    transform var(--transition-speed) ease,
+                    visibility var(--transition-speed) ease;
+        z-index: 100;
+    }
+
+    .dropdown-menu a {
+        padding: 12px 16px;
+        display: block;
+        font-weight: 600;
+        transition: background-color var(--transition-speed) ease, 
+                    transform var(--transition-speed) ease;
+    }
+
+    .dropdown-menu a:hover {
+        background-color: var(--card-bg);
+        transform: translateX(5px);
+    }
+
+    .nav-item:hover .dropdown-menu {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .nav-icons {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .icon-link {
+        font-size: 1.2rem;
+        transition: color var(--transition-speed) ease, transform var(--transition-speed) ease;
+    }
+
+    .icon-link:hover {
+        color: var(--accent-color);
+        transform: scale(1.2);
+    }
+
+    .dark-mode-toggle {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1.2rem;
+        color: inherit;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.3rem;
+        border-radius: 50%;
+        transition: background-color var(--transition-speed) ease, 
+                    transform var(--transition-speed) ease;
+    }
+
+    .dark-mode-toggle:hover {
+        background-color: var(--card-bg);
+        transform: rotate(30deg);
+    }
+
+    /* Mobile menu button */
+    .menu-toggle {
+        display: none;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1.5rem;
+        color: var(--text-color);
+        transition: color var(--transition-speed) ease;
+        z-index: 1001;
+    }
+
+    .menu-toggle:hover {
+        color: var(--accent-color);
+    }
+
+    /* Mobile Menu */
+    .mobile-menu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 80%;
+        max-width: 320px;
+        height: 100vh;
+        background-color: var(--nav-bg);
+        z-index: 2000;
+        display: flex;
+        flex-direction: column;
+        padding: 2rem;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        overflow-y: auto;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .mobile-menu.active {
+        transform: translateX(0);
+    }
+
+    .mobile-menu-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .mobile-menu-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--text-color);
+        cursor: pointer;
+        transition: color 0.2s ease;
+    }
+
+    .mobile-menu-close:hover {
+        color: var(--accent-color);
+    }
+
+    .mobile-nav-items {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .mobile-nav-link {
+        font-size: 1.2rem;
+        font-weight: 700;
+        transition: color 0.2s ease, transform 0.2s ease;
+        display: block;
+    }
+
+    .mobile-nav-link:hover {
+        color: var(--accent-color);
+        transform: translateX(5px);
+    }
+
+    .mobile-dropdown {
+        position: relative;
+    }
+
+    .mobile-dropdown-toggle {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        background: none;
+        border: none;
+        font-family: inherit;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: inherit;
+        cursor: pointer;
+        padding: 0;
+        text-align: left;
+        transition: color 0.2s ease;
+    }
+
+    .mobile-dropdown-toggle:hover {
+        color: var(--accent-color);
+    }
+
+    .mobile-dropdown-toggle i {
+        transition: transform 0.3s ease;
+    }
+
+    .mobile-dropdown.active .mobile-dropdown-toggle i {
+        transform: rotate(180deg);
+    }
+
+    .mobile-dropdown-menu {
+        display: none;
+        padding-left: 1rem;
+        margin-top: 1rem;
+        border-left: 2px solid var(--border-color);
+    }
+
+    .mobile-dropdown.active .mobile-dropdown-menu {
+        display: block;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .mobile-dropdown-menu a {
+        display: block;
+        padding: 0.7rem 0;
+        font-weight: 600;
+        transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+    .mobile-dropdown-menu a:hover {
+        color: var(--accent-color);
+        transform: translateX(5px);
+    }
+
+    .mobile-nav-icons {
+        display: flex;
+        justify-content: space-around;
+        margin-top: auto;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .mobile-nav-icons a, .mobile-nav-icons button {
+        font-size: 1.5rem;
+        transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+    .mobile-nav-icons a:hover, .mobile-nav-icons button:hover {
+        color: var(--accent-color);
+        transform: scale(1.2);
+    }
+
+    /* Menu overlay */
+    .menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1999;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .menu-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* Checkout Page Styles */
+    .checkout-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+        animation: fadeIn var(--animation-duration) ease-out;
+    }
+
+    .page-title {
+        text-align: center;
+        margin-bottom: 2rem;
+        font-size: 2rem;
+        position: relative;
+        padding-bottom: 0.5rem;
+    }
+
+    .page-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 3px;
+        background-color: var(--accent-color);
+    }
+
+    .checkout-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 2rem;
+    }
+
+    @media (max-width: 768px) {
+        .checkout-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .cart-items {
+        background-color: var(--card-bg);
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .cart-item {
+        display: flex;
+        align-items: center;
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--border-color);
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    .cart-item:last-child {
+        border-bottom: none;
+    }
+
+    .item-image {
+        width: 80px;
+        height: 80px;
+        border-radius: 4px;
+        background-size: cover;
+        background-position: center;
+        margin-right: 1rem;
+    }
+
+    .item-details {
+        flex: 1;
+    }
+
+    .item-name {
+        font-weight: 700;
+        margin-bottom: 0.25rem;
+    }
+
+    .item-price {
+        color: var(--accent-color);
+        font-weight: 600;
+    }
+
+    .item-quantity {
+        display: flex;
+        align-items: center;
+        margin-top: 0.5rem;
+    }
+
+    .quantity-btn {
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--bg-color);
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color var(--transition-speed) ease;
+    }
+
+    .quantity-btn:hover {
+        background-color: var(--card-bg);
+    }
+
+    .quantity-input {
+        width: 40px;
+        height: 30px;
+        text-align: center;
+        margin: 0 0.5rem;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+    }
+
+    .item-remove {
+        color: var(--accent-color);
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1.2rem;
+        transition: transform var(--transition-speed) ease;
+        margin-left: 1rem;
+    }
+
+    .item-remove:hover {
+        transform: scale(1.2);
+    }
+
+    .order-summary {
+        background-color: var(--card-bg);
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        position: sticky;
+        top: calc(var(--navbar-height) + 20px);
+    }
+
+    .summary-title {
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.75rem;
+    }
+
+    .summary-row.total {
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .checkout-btn {
+        width: 100%;
+        padding: 1rem;
+        background-color: var(--accent-color);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 1.5rem;
+        transition: background-color var(--transition-speed) ease, 
+                    transform var(--transition-speed) ease,
+                    box-shadow var(--transition-speed) ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .checkout-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.2);
+        transition: transform 0.5s ease;
+        transform: skewX(-15deg);
+    }
+
+    .checkout-btn:hover {
+        background-color: #e63939;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(230, 57, 57, 0.3);
+    }
+
+    .checkout-btn:hover::before {
+        transform: translateX(200%) skewX(-15deg);
+    }
+
+    .continue-shopping {
+        display: block;
+        text-align: center;
+        margin-top: 1rem;
+        color: var(--text-color);
+        transition: color var(--transition-speed) ease;
+    }
+
+    .continue-shopping:hover {
+        color: var(--accent-color);
+    }
+
+    .payment-methods {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        justify-content: center;
+    }
+
+    .payment-method {
+        width: 40px;
+        height: 25px;
+        background-color: var(--bg-color);
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        border: 1px solid var(--border-color);
+    }
+
+    .shipping-form {
+        background-color: var(--card-bg);
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-top: 2rem;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-title {
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    @media (max-width: 480px) {
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        background-color: var(--bg-color);
+        transition: border-color var(--transition-speed) ease, 
+                    transform var(--transition-speed) ease, 
+                    box-shadow var(--transition-speed) ease;
+    }
+
+    .form-input:focus {
+        border-color: var(--accent-color);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(166, 0, 25, 0.1);
+        outline: none;
+    }
+
+    .form-select {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        background-color: var(--bg-color);
+        transition: border-color var(--transition-speed) ease;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 0.5rem center;
+        background-size: 1em;
+    }
+
+    .form-select:focus {
+        border-color: var(--accent-color);
+        outline: none;
+    }
+
+    /* Footer */
+    footer {
+        background-color: var(--footer-bg);
+        color: var(--footer-text);
+        padding-bottom: 5vh;
+        position: relative;
+        overflow: hidden;
+        margin-top: 4rem;
+    }
+
+    footer::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+    }
+
+    .footer-bottom {
+        text-align: center;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 0.9rem;
+        opacity: 0.7;
+        transition: opacity var(--transition-speed) ease;
+    }
+
+    .footer-bottom:hover {
+        opacity: 1;
+    }
+
+    /* Responsive styles */
+    @media (max-width: 1024px) {
+        .menu-toggle {
+            display: block;
+        }
+        
+        .nav-menu, .nav-icons {
+            display: none;
+        }
+        
+        .navbar {
+            justify-content: space-between;
+        }
+    }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator"></div>
+
+    <!-- Menu overlay -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- Mobile menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <h3>Menu</h3>
+            <button class="mobile-menu-close" id="mobileMenuClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="mobile-nav-items">
+            <div class="mobile-dropdown" id="clothesDropdown">
+                <button class="mobile-dropdown-toggle">
+                    Clothes <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="mobile-dropdown-menu">
+                    <a href="#">Male</a>
+                    <a href="#">Female</a>
+                </div>
+            </div>
+            
+            <a href="#" class="mobile-nav-link">Music</a>
+        </div>
+        
+        <div class="mobile-nav-icons">
+            <a href="#"><i class="fas fa-user"></i></a>
+            <a href="#"><i class="fas fa-shopping-cart"></i></a>
+            <a href="#"><i class="fas fa-heart"></i></a>
+            <button class="dark-mode-toggle" id="mobileDarkModeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </div>
+
+    <header id="header">
+        <nav class="navbar">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="nav-menu">
+                <div class="nav-item">
+                    <a href="#" class="nav-link">Clothes</a>
+                    <div class="dropdown-menu">
+                        <a href="#">Male</a>
+                        <a href="#">Female</a>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link">Music</a>
+                </div>
+            </div>
+            
+            <div class="logo">
+                <h1>CultureDrop</h1>
+            </div>
+            
+            <div class="nav-icons">
+                <a href="#" class="icon-link"><i class="fas fa-user"></i></a>
+                <a href="#" class="icon-link"><i class="fas fa-shopping-cart"></i></a>
+                <a href="#" class="icon-link"><i class="fas fa-heart"></i></a>
+                <button class="dark-mode-toggle" id="darkModeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="checkout-container">
+        <h1 class="page-title">Your Shopping Cart</h1>
+        
+        <div class="checkout-grid">
+            <div class="checkout-left">
+                <div class="cart-items">
+                    <div class="cart-item">
+                        <div class="item-image" style="background-image: url('https://images.unsplash.com/photo-1523398002811-999ca8dec234?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');"></div>
+                        <div class="item-details">
+                            <div class="item-name">Urban Streetwear Hoodie</div>
+                            <div class="item-price">$123</div>
+                            <div class="item-quantity">
+                                <button class="quantity-btn" onclick="updateQuantity('decrease', 0)">-</button>
+                                <input type="number" class="quantity-input" value="1" min="1" max="10" id="quantity-0">
+                                <button class="quantity-btn" onclick="updateQuantity('increase', 0)">+</button>
+                            </div>
+                        </div>
+                        <button class="item-remove" onclick="removeItem(0)">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="cart-item">
+                        <div class="item-image" style="background-image: url('https://images.unsplash.com/photo-1483412033650-1015ddeb83d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');"></div>
+                        <div class="item-details">
+                            <div class="item-name">Vintage Hip-Hop Tee</div>
+                            <div class="item-price">$123</div>
+                            <div class="item-quantity">
+                                <button class="quantity-btn" onclick="updateQuantity('decrease', 1)">-</button>
+                                <input type="number" class="quantity-input" value="1" min="1" max="10" id="quantity-1">
+                                <button class="quantity-btn" onclick="updateQuantity('increase', 1)">+</button>
+                            </div>
+                        </div>
+                        <button class="item-remove" onclick="removeItem(1)">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="shipping-form">
+                    <h2 class="form-title">Shipping Information</h2>
+                    <form id="shipping-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="first-name" class="form-label">First Name</label>
+                                <input type="text" id="first-name" class="form-input" placeholder="First Name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="last-name" class="form-label">Last Name</label>
+                                <input type="text" id="last-name" class="form-input" placeholder="Last Name" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" id="email" class="form-input" placeholder="Email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="address" class="form-label">Address</label>
+                            <input type="text" id="address" class="form-input" placeholder="Address" required>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="city" class="form-label">City</label>
+                                <input type="text" id="city" class="form-input"  placeholder="City">
+                            </div>
+                            <div class="form-group">
+                                <label for="postal-code" class="form-label">Postal Code</label>
+                                <input type="text" id="postal-code" class="form-input" placeholder="Postal Code" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="country" class="form-label">Country</label>
+                            <select id="country" class="form-select" required>
+                                <option value="">Select a country</option>
+                                <option value="US">United States</option>
+                                <option value="CA">Canada</option>
+                                <option value="UK">United Kingdom</option>
+                                <option value="AU">Australia</option>
+                                <option value="FR">France</option>
+                                <option value="DE">Germany</option>
+                                <option value="IT">Italy</option>
+                                <option value="ES">Spain</option>
+                                <option value="JP">Japan</option>
+                                <option value="RO">Romania</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone" class="form-label">Phone Number</label>
+                            <input type="tel" id="phone" class="form-input" placeholder="Phone Number" required>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="checkout-right">
+                <div class="order-summary">
+                    <h2 class="summary-title">Order Summary</h2>
+                    
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span id="subtotal">$109.97</span>
+                    </div>
+                    
+                    <div class="summary-row">
+                        <span>Shipping</span>
+                        <span id="shipping">$5.99</span>
+                    </div>
+                    
+                    <div class="summary-row">
+                        <span>Tax</span>
+                        <span id="tax">$10.99</span>
+                    </div>
+                    
+                    <div class="summary-row total">
+                        <span>Total</span>
+                        <span id="total">$126.95</span>
+                    </div>
+                    
+                    <button class="checkout-btn" id="checkout-btn">
+                        <i class="fas fa-lock"></i> Proceed to Payment
+                    </button>
+                    
+                    <a href="index.html" class="continue-shopping">
+                        <i class="fas fa-arrow-left"></i> Continue Shopping
+                    </a>
+                    
+                    <div class="payment-methods">
+                        <div class="payment-method"><i class="fab fa-cc-visa"></i></div>
+                        <div class="payment-method"><i class="fab fa-cc-mastercard"></i></div>
+                        <div class="payment-method"><i class="fab fa-cc-amex"></i></div>
+                        <div class="payment-method"><i class="fab fa-cc-paypal"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-bottom">
+            <p>&copy; 2025 CultureDrop. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Dark mode toggle
+        const toggle = document.getElementById('darkModeToggle');
+        const mobileToggle = document.getElementById('mobileDarkModeToggle');
+      
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark-mode');
+            const mainIcon = toggle.querySelector('i');
+            const mobileIcon = mobileToggle.querySelector('i');
+            
+            if (document.documentElement.classList.contains('dark-mode')) {
+                mainIcon.classList.remove('fa-moon');
+                mainIcon.classList.add('fa-sun');
+                mobileIcon.classList.remove('fa-moon');
+                mobileIcon.classList.add('fa-sun');
+            } else {
+                mainIcon.classList.remove('fa-sun');
+                mainIcon.classList.add('fa-moon');
+                mobileIcon.classList.remove('fa-sun');
+                mobileIcon.classList.add('fa-moon');
+            }
+        }
+        
+        toggle.addEventListener('click', toggleDarkMode);
+        mobileToggle.addEventListener('click', toggleDarkMode);
+
+        // Mobile menu functionality
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuOverlay = document.getElementById('menuOverlay');
+        const mobileMenuClose = document.getElementById('mobileMenuClose');
+        const clothesDropdown = document.getElementById('clothesDropdown');
+        
+        menuToggle.addEventListener('click', function() {
+            mobileMenu.classList.add('active');
+            menuOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
+        });
+        
+        function closeMenu() {
+            mobileMenu.classList.remove('active');
+            menuOverlay.classList.remove('active');
+            document.body.style.overflow = ''; // Re-enable scrolling
+        }
+        
+        mobileMenuClose.addEventListener('click', closeMenu);
+        menuOverlay.addEventListener('click', closeMenu);
+        
+        // Mobile dropdown functionality
+        clothesDropdown.addEventListener('click', function(e) {
+            // Prevent the click from closing the menu
+            e.stopPropagation();
+            this.classList.toggle('active');
+        });
+
+        
+    
+    </script>
+</body>
+</html>
