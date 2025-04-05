@@ -112,6 +112,16 @@
                     <h3>{{ cloth.name }}</h3>
                     <p>{{ cloth.description }}</p>
                     <p>Price: {{ cloth.price }} RON</p>
+                    <!-- add to cart -->
+                    <div class="item-actions">
+                        <button class="buy-button">
+                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </button>
+                        <button class="wishlist-button">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
+                    <!-- add to cart -->
                 </div>
                 {% endfor %}
             </div>

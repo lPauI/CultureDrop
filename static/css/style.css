@@ -393,6 +393,67 @@ header.hide {
     transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
     opacity: 0;
     transform: translateY(30px);
+    
+}
+
+
+.featured-item .price {
+    padding: 0 1rem 0.5rem;
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: var(--accent-color);
+}
+
+.featured-item .item-actions {
+    padding: 0.5rem 1rem 1rem;
+    display: flex;
+    gap: 0.5rem;
+    margin-top: auto;
+}
+
+.buy-button {
+    flex: 1;
+    padding: 0.6rem 0;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color var(--transition-speed) ease, 
+                transform var(--transition-speed) ease,
+                box-shadow var(--transition-speed) ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.buy-button:hover {
+    background-color: #e63939;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(230, 57, 57, 0.3);
+}
+
+.wishlist-button {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color var(--transition-speed) ease,
+    transform var(--transition-speed) ease,
+    color var(--transition-speed) ease;
+}
+
+.wishlist-button:hover {
+    background-color: #f9f9f9;
+    transform: translateY(-2px);
+    color: var(--accent-color);
 }
 
 .featured-item.visible {
