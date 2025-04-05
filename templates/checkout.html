@@ -893,9 +893,12 @@
                     </div>
                 </div>
                 
-                <button class="checkout-btn" id="checkout-btn">
-                    <i class="fas fa-lock"></i> Proceed to Payment
-                </button>
+                <form action="{{ url_for('create_order') }}" method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button class="checkout-btn" type="submit">
+                        <i class="fas fa-lock"></i> Proceed to Payment
+                    </button>
+                </form>
                 
                 <a href="{{ url_for('home') }}" class="continue-shopping">
                     <i class="fas fa-arrow-left"></i> Continue Shopping

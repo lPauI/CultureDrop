@@ -73,6 +73,13 @@ class Cart(db.Model):
     clothes = db.relationship('Clothes', backref='cart_items')
 
 
+class Order(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    total_price = db.Column(db.Float, nullable=False)
+    created_at = db.Column(db.DateTime, server_default=func.now())
+
+
 @app.route('/')
 def home():
     is_logged = 'user_id' in session
@@ -199,6 +206,31 @@ def remove_from_cart(cart_item_id):
         flash('The product was not found.', 'warning')
         
     return redirect(url_for('checkout'))
+
+
+@app.route('/create_order', methods=['POST'])
+def create_order():
+    if 'user_id' not in session:
+        flash('You need to login for this action.', 'warning')
+        return redirect(url_for('login'))
+    
+    user_id = session['user_id']
+    cart_items = Cart.query.filter_by(user_id=user_id).all()
+    if not cart_items:
+        flash('Your cart is empty!', 'warning')
+        return redirect(url_for('checkout'))
+    
+    total_price = sum(item.quantity * item.clothes.price for item in cart_items)
+    
+    new_order = Order(user_id=user_id, total_price=total_price)
+    db.session.add(new_order)
+    
+    for item in cart_items:
+        db.session.delete(item)
+    
+    db.session.commit()
+    flash('The order was created successfully!', 'success')
+    return redirect(url_for('home'))
 
 
 if __name__ == '__main__':
