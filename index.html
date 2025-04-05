@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CultureDrop - Music & Fashion Concept Shop</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-left">
+                <div class="dropdown">
+                    <button class="dropbtn">Clothes</button>
+                    <div class="dropdown-content">
+                        <a href="#">Male</a>
+                        <a href="#">Female</a>
+                    </div>
+                </div>
+                <a href="#" class="nav-link">Music</a>
+            </div>
+            
+            <div class="logo">
+                <h1>CultureDrop</h1>
+            </div>
+            
+            <div class="nav-right">
+                <a href="#" class="icon-link"><i class="fas fa-user"></i></a>
+                <a href="#" class="icon-link"><i class="fas fa-shopping-cart"></i></a>
+                <a href="#" class="icon-link"><i class="fas fa-heart"></i></a>
+                <button class="dark-mode-toggle" id="darkModeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+
+    <!-- hero -->
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h2>Where Music Meets Fashion</h2>
+                <p>Discover the perfect blend of urban culture, streetwear, and sound</p>
+                <div class="cta-buttons">
+                    <a href="#" class="cta-button">Shop Clothes</a>
+                    <a href="#" class="cta-button secondary">Explore Music</a>
+                </div>
+            </div>
+        </section>
+    <!-- hero -->
+
+
+        <section class="featured">
+            <h2 class="section-title">Featured Collections</h2>
+            <div class="featured-grid">
+                <div class="featured-item">
+                    <div class="featured-image"></div>
+                    <h3>Test</h3>
+                    <p>vedem maine vedem maine</p>
+                </div>
+                <div class="featured-item">
+                    <div class="featured-image"></div>
+                    <h3>Test</h3>
+                    <p>vedem maine vedem maine</p>
+                </div>
+                <div class="featured-item">
+                    <div class="featured-image"></div>
+                    <h3>Test</h3>
+                    <p>vedem maine vedem maine</p>
+                </div>
+                <div class="featured-item">
+                    <div class="featured-image"></div>
+                    <h3>Test</h3>
+                    <p>vedem maine vedem maine</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-bottom">
+            <p>&copy; 2025 CultureDrop. All rights reserved.</p>
+        </div>
+    </footer>
+    <!--  -->
+
+    <script>
+        const toggle = document.getElementById('darkModeToggle');
+      
+        toggle.addEventListener('click', () => {
+          // Toggle pe root (html elementul) sau body – tu alegi, dar html e mai sigur
+          document.documentElement.classList.toggle('dark-mode');
+      
+          // Schimbă și iconița din buton (opțional)
+          const icon = toggle.querySelector('i');
+          if (document.documentElement.classList.contains('dark-mode')) {
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
+          } else {
+            icon.classList.remove('fa-sun');
+            icon.classList.add('fa-moon');
+          }
+        });
+      </script>
+      
+    
+</body>
+</html>
