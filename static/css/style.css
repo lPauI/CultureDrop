@@ -171,7 +171,7 @@ a {
 
 .hero {
     height: calc(100vh - var(--navbar-height)); 
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/static/img/bug_mafia.jpg');
     background-size: cover;
     background-position: center;
     display: flex;
@@ -564,4 +564,3 @@ input:focus, button:focus {
     transition: 0.3s ease;
   }
 
-  
