@@ -123,6 +123,31 @@
                 {% endfor %}
             </div>
         </section>
+        
+        <!-- Breakout Section -->
+        <section class="breakout">
+            <div class="breakout-content">
+                <h2>Music Defines Culture</h2>
+                <p>Discover the soundtrack to your style. Blend fashion with the perfect beats.</p>
+                <a href="#songs" class="breakout-button">Explore Music</a>
+            </div>
+        </section>
+        
+        <!-- Songs Section -->
+        <section id="songs" class="songs-section">
+            <h2 class="section-title">Featured Music</h2>
+            <div class="songs-grid">
+                {% for song in songs %}
+                <div class="song-item" onclick="location.href='/song/{{ song.id }}'">
+                    <div class="song-cover" style="background-image: url('{{ song.cover_path }}');"></div>
+                    <div class="song-info">
+                        <h3>{{ song.title }}</h3>
+                        <p class="song-artist">{{ song.artist }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
     </main>
 
     {% include 'footer.html' %}

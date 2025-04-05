@@ -85,8 +85,9 @@ def home():
     is_logged = 'user_id' in session
     
     clothes = Clothes.query.order_by(func.random()).all()
+    songs = Songs.query.order_by(func.random()).limit(8).all()
     
-    return render_template('index.html', clothes=clothes)
+    return render_template('index.html', clothes=clothes, songs=songs)
 
 
 @app.route('/register', methods=['GET', 'POST'])
