@@ -182,9 +182,6 @@ def add_to_cart():
     if 'user_id' not in session:
         flash('You need to login for this action.', 'warning')
         return redirect(url_for('login'))
-    else:
-        return redirect(url_for('checkout'))
-    
         
     product_id = request.form.get('product_id')
     if not product_id:
@@ -203,7 +200,7 @@ def add_to_cart():
     
     db.session.commit()
     flash('The product was added to the cart!', 'success')
-    return redirect(url_for('home'))
+    return redirect(url_for('checkout'))
 
 
 @app.route('/remove_from_cart/<int:cart_item_id>', methods=['POST'])
