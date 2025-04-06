@@ -37,6 +37,7 @@ class Users(db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)
 
 
 class Clothes(db.Model):
@@ -158,7 +159,7 @@ def login():
 def logout():
     session.pop('user_id', None)
     session.pop('email', None)
-    flash('Te-ai deconectat cu succes!', 'success')
+    flash('You logged out successfully!', 'success')
     return redirect(url_for('home'))
 
 
