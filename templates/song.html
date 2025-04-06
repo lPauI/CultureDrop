@@ -35,6 +35,7 @@
             background-position: center;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
     {% include 'header.html' %}
@@ -75,11 +76,11 @@
         <!-- Chatbot -->
         <div class="chatbot-container">
             <div class="chatbot-header">Chatbot</div>
-            <div class="chat-messages">
+            <div class="chat-messages" id="chat-messages">
             </div>
             <div class="chat-input-container">
-                <input type="text" class="chat-input" placeholder="Write a question">
-                <button class="send-button">
+                <input type="text" class="chat-input" id="user-input" placeholder="Write a question">
+                <button class="send-button" id="send-button">
                     <i class="fas fa-paper-plane"></i>
                 </button>
             </div>
@@ -87,6 +88,9 @@
     </div>
     
     <script>
+        const currentSong = "{{ song.title }}";
+        const currentLyrics = `{{ song.lyrics }}`;
+
         const audio = document.getElementById('audioPlayer');
         const playPauseIcon = document.querySelector('.play-pause i');
         const progressBar = document.querySelector('.progress-bar');
@@ -128,6 +132,64 @@
 
         volumeSlider.addEventListener('input', function() {
             audio.volume = volumeSlider.value;
+        });
+
+        // Chatbot functionality using FastAPI backend
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
+
+        function appendMessage(sender, content) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('chat-message', sender);
+            messageDiv.textContent = content;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        sendButton.addEventListener('click', function() {
+            const userMessage = chatInput.value.trim();
+            if (userMessage === '') return;
+            
+            appendMessage('user', userMessage);
+            chatInput.value = '';
+            
+            const loadingElement = document.createElement('div');
+            loadingElement.className = 'message bot-message loading';
+            loadingElement.textContent = 'Thinking...';
+            chatMessages.appendChild(loadingElement);
+            
+            axios({
+                method: 'post',
+                url: 'http://localhost:8000/api/chat',
+                data: {
+                    message: userMessage,
+                    current_song: currentSong,
+                    lyrics: currentLyrics
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                document.querySelector('.loading')?.remove();
+                if (response.data && response.data.reply) {
+                    appendMessage('bot', response.data.reply);
+                }
+            })
+            .catch(error => {
+                document.querySelector('.loading')?.remove();
+                console.error('Error:', error);
+                appendMessage('bot', "Error connecting to AI service. Make sure the AI API server is running on port 8000.");
+            });
+        });
+
+        // Allow sending message on Enter key press
+        chatInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                sendButton.click();
+            }
         });
     </script>
 </body>

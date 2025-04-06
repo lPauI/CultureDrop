@@ -7,6 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Length, Email
 from sqlalchemy.sql.expression import func
+from flask_cors import CORS
 
 from bcrypt import hashpw, gensalt, checkpw
 
@@ -17,6 +18,7 @@ load_dotenv()
 
 # Initialize Flask app and configure database connection
 app = Flask(__name__)
+CORS(app)
 app.config['SECRET_KEY'] = os.getenv('FLASK_SECRET_KEY')
 csrf = CSRFProtect(app)
 
