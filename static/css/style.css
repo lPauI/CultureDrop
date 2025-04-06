@@ -545,7 +545,7 @@ header.hide {
 /* Breakout Section */
 .breakout {
     background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
-                url('/static/img/breakout-bg.jpg');
+                url('/static/img/bug_mafia.jpg');
     background-size: cover;
     background-position: center;
     color: white;

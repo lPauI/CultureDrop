@@ -310,7 +310,7 @@ def add_favorite():
         db.session.commit()
         flash('Item added to favorites!', 'success')
     
-    return redirect(url_for('home'))
+    return redirect(url_for('favorites'))
 
 
 @app.route('/remove_favorite/<int:favorite_id>', methods=['POST'])
