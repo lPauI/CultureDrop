@@ -515,13 +515,20 @@
     }
 
     .order-summary {
-        background-color: var(--card-bg);
-        border-radius: 8px;
+        background: var(--card-bg);
         padding: 1.5rem;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-        position: sticky;
-        top: calc(var(--navbar-height) + 20px);
-    }
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        
+        top: 100px;
+      }
+      
+      @media (max-width: 768px) {
+        .order-summary {
+          position: static;
+        }
+      }
+      
 
     .summary-title {
         font-size: 1.2rem;
