@@ -4,18 +4,8 @@
             <i class="fas fa-bars"></i>
         </button>
         
-        <div class="nav-menu">
-            <div class="nav-item">
-                <a href="#" class="nav-link">Clothes</a>
-                <div class="dropdown-menu">
-                    <a href="#">Male</a>
-                    <a href="#">Female</a>
-                </div>
-            </div>
-            <div class="nav-item">
-                <a href="#" class="nav-link">Music</a>
-            </div>
-        </div>
+        <a href="{{ url_for('home') + '#featured' }}" class="nav-link">Clothes</a>
+        <a href="{{ url_for('home') + '#songs' }}" class="nav-link">Songs</a>
         
         <div class="logo">
             <a href="{{ url_for('home') }}">CultureDrop</a>
@@ -24,7 +14,7 @@
         <div class="nav-icons">
             <a href="#" class="icon-link" id="userProfileIcon"><i class="fas fa-user"></i></a>
             <a href="{{ url_for('checkout') }}" class="icon-link"><i class="fas fa-shopping-cart"></i></a>
-            <a href="#" class="icon-link"><i class="fas fa-heart"></i></a>
+            <a href="{{ url_for('favorites') }}" class="icon-link"><i class="fas fa-heart"></i></a>
             <button class="dark-mode-toggle" id="darkModeToggle">
                 <i class="fas fa-moon"></i>
             </button>

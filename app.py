@@ -83,6 +83,14 @@ class Order(db.Model):
     created_at = db.Column(db.DateTime, server_default=func.now())
 
 
+class Favorite(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    item_id = db.Column(db.Integer, nullable=False)
+    item_type = db.Column(db.String(50), nullable=False)
+    created_at = db.Column(db.DateTime, server_default=func.now())
+
+
 @app.route('/')
 def home():
     is_logged = 'user_id' in session
@@ -243,9 +251,83 @@ def song(song_id):
     return render_template('song.html', song=song)
 
 
-@app.route('/fv')
-def fv():
-    return render_template('favorites.html')
+@app.route('/favorites')
+def favorites():
+    if 'user_id' not in session:
+        flash('You need to be logged in to view favorites.', 'warning')
+        return redirect(url_for('login'))
+    
+    user_id = session['user_id']
+    favorites_list = Favorite.query.filter_by(user_id=user_id).order_by(Favorite.created_at.desc()).all()
+    favorites_details = []
+
+    for fav in favorites_list:
+        details = {
+            'id': fav.id,
+            'created_at': fav.created_at
+        }
+
+        if fav.item_type == 'cloth':
+            cloth = Clothes.query.get(fav.item_id)
+            if cloth:
+                details['title'] = cloth.name
+                details['cover'] = cloth.image_path
+        
+        elif fav.item_type == 'song':
+            song = Songs.query.get(fav.item_id)
+            if song:
+                details['title'] = song.title
+                details['cover'] = song.cover_path
+        
+        favorites_details.append(details)
+
+    return render_template('favorites.html', favorites=favorites_details)
+
+
+@app.route('/add_favorite', methods=['POST'])
+def add_favorite():
+    if 'user_id' not in session:
+        flash('You need to be logged in to perform this action.', 'warning')
+        return redirect(url_for('login'))
+    
+    user_id = session['user_id']
+    item_id = request.form.get('item_id')
+    item_type = request.form.get('item_type')
+    
+    if not item_id or not item_type:
+        flash('Invalid item selection.', 'warning')
+        return redirect(url_for('home'))
+    
+    # Prevent duplicate favorites
+    existing_favorite = Favorite.query.filter_by(user_id=user_id, item_id=item_id, item_type=item_type).first()
+    if existing_favorite:
+        flash('Item already in favorites.', 'info')
+    else:
+        new_favorite = Favorite(user_id=user_id, item_id=item_id, item_type=item_type)
+        db.session.add(new_favorite)
+        db.session.commit()
+        flash('Item added to favorites!', 'success')
+    
+    return redirect(url_for('home'))
+
+
+@app.route('/remove_favorite/<int:favorite_id>', methods=['POST'])
+def remove_favorite(favorite_id):
+    if 'user_id' not in session:
+        flash('You need to be logged in to perform this action.', 'warning')
+        return redirect(url_for('login'))
+    
+    user_id = session['user_id']
+    fav = Favorite.query.filter_by(id=favorite_id, user_id=user_id).first()
+    
+    if fav:
+        db.session.delete(fav)
+        db.session.commit()
+        flash('Item removed from favorites!', 'success')
+    else:
+        flash('Favorite not found.', 'warning')
+    
+    return redirect(url_for('favorites'))
 
 
 if __name__ == '__main__':
