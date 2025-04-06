@@ -167,7 +167,7 @@ def logout():
 @app.route("/checkout")
 def checkout():
     if 'user_id' not in session:
-        flash('You must be logged in to access the checkout page.', 'warning')
+        flash('You must be logged in to access the checkout page.', 'error')
         return redirect(url_for('login'))
     
     user_id = session['user_id']
