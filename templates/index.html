@@ -66,11 +66,11 @@
                 <div class="profile-info">
                     <p>Conectat ca: <strong>{{ session.email }}</strong></p>
                 </div>
-                <a href="{{ url_for('logout') }}" class="logout-btn">Deconectare</a>
+                <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
                 {% else %}
                 <div class="login-register-links">
-                    <a href="{{ url_for('login') }}" class="popup-btn">Autentificare</a>
-                    <a href="{{ url_for('register') }}" class="popup-btn secondary">Înregistrare</a>
+                    <a href="{{ url_for('login') }}" class="popup-btn">Login</a>
+                    <a href="{{ url_for('register') }}" class="popup-btn secondary">Register</a>
                 </div>
                 {% endif %}
             </div>
