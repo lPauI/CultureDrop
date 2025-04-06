@@ -145,6 +145,7 @@ def login():
             # Set up session
             session['user_id'] = user.id
             session['email'] = user.email
+            session['is_admin'] = user.is_admin
             
             flash('Login successful!', 'success')
             return redirect(url_for('home'))
@@ -329,6 +330,38 @@ def remove_favorite(favorite_id):
         flash('Favorite not found.', 'warning')
     
     return redirect(url_for('favorites'))
+
+
+@app.route('/update_cloth', methods=['POST'])
+def update_cloth():
+    if 'user_id' not in session:
+        return jsonify({'success': False, 'message': 'You must be logged in.'}), 401
+
+    user = Users.query.get(session['user_id'])
+    if not user or not user.is_admin:
+        return jsonify({'success': False, 'message': 'Access denied.'}), 403
+
+    cloth_id = request.form.get('cloth_id')
+    name = request.form.get('name')
+    price = request.form.get('price')
+    
+    print(cloth_id, name, price)
+
+    if not cloth_id or not name or not price:
+        return jsonify({'success': False, 'message': 'Missing data.'}), 400
+
+    cloth = Clothes.query.get(cloth_id)
+    if not cloth:
+        return jsonify({'success': False, 'message': 'Cloth not found.'}), 404
+
+    try:
+        cloth.name = name
+        cloth.price = float(price)
+        db.session.commit()
+        return jsonify({'success': True, 'message': 'Cloth updated successfully!'})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'message': 'Error updating cloth.'}), 500
 
 
 if __name__ == '__main__':
