@@ -50,6 +50,7 @@ class Songs(db.Model):
     title = db.Column(db.String(120), nullable=False)
     cover_path = db.Column(db.String(200), nullable=False)
     song_path = db.Column(db.String(200), nullable=False)
+    lyrics = db.Column(db.Text, nullable=False)
 
 
 class RegistrationForm(FlaskForm):
@@ -234,9 +235,11 @@ def create_order():
     return redirect(url_for('home'))
 
 
-@app.route('/song')
-def song():
-    return render_template('song.html')
+@app.route('/song/<int:song_id>')
+def song(song_id):
+    song = Songs.query.get_or_404(song_id)
+    return render_template('song.html', song=song)
+
 
 @app.route('/fv')
 def fv():
