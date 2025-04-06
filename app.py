@@ -182,6 +182,9 @@ def add_to_cart():
     if 'user_id' not in session:
         flash('You need to login for this action.', 'warning')
         return redirect(url_for('login'))
+    else:
+        return redirect(url_for('checkout'))
+    
         
     product_id = request.form.get('product_id')
     if not product_id:

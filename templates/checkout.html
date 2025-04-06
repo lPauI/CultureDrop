@@ -743,6 +743,9 @@
             justify-content: space-between;
         }
     }
+        
+
+    
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -804,9 +807,9 @@
                             <div class="item-name">{{ cart_item.clothes.name }}</div>
                             <div class="item-price">${{ cart_item.clothes.price }}</div>
                             <div class="item-quantity">
-                                <button class="quantity-btn" onclick="updateQuantity('decrease', {{ cart_item.id }})">-</button>
+                                
                                 <input type="number" class="quantity-input" value="{{ cart_item.quantity }}" min="1" max="10" id="quantity-{{ cart_item.id }}">
-                                <button class="quantity-btn" onclick="updateQuantity('increase', {{ cart_item.id }})">+</button>
+                                
                             </div>
                         </div>
                         <form action="{{ url_for('remove_from_cart', cart_item_id=cart_item.id) }}" method="POST" style="display:inline;">
