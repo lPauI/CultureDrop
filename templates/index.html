@@ -263,8 +263,6 @@
             const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
             const scrolled = (winScroll / height) * 100;
             document.querySelector('.scroll-indicator').style.width = scrolled + '%';
-            
-            // Show/hide back to top button
             const backToTop = document.getElementById('backToTop');
             if (winScroll > 300) {
                 backToTop.classList.add('visible');
@@ -281,7 +279,7 @@
             });
         });
 
-        // Navbar hide/show on scroll
+        
         let lastScrollTop = 0;
         window.addEventListener('scroll', function() {
             const header = document.getElementById('header');
@@ -295,13 +293,13 @@
             lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
         });
 
-        // User profile popup functionality
+        
         const profilePopup = document.getElementById('profilePopup');
         const userProfileIcon = document.getElementById('userProfileIcon');
         const mobileUserProfileIcon = document.getElementById('mobileUserProfileIcon');
         const popupClose = document.getElementById('popupClose');
 
-        // Function to open profile popup
+        
         function openProfilePopup(e) {
             e.preventDefault();
             profilePopup.classList.add('active');
@@ -316,7 +314,7 @@
             document.body.style.overflow = '';
         }
 
-        // Event listeners for profile popup
+        
         userProfileIcon.addEventListener('click', openProfilePopup);
         mobileUserProfileIcon.addEventListener('click', openProfilePopup);
         popupClose.addEventListener('click', closeProfilePopup);
@@ -338,7 +336,7 @@
             });
         });
 
-        // Edit Modal Functions
+        
         function openEditModal(id, name, price) {
             document.getElementById('editClothId').value = id;
             document.getElementById('editName').value = name;
@@ -355,7 +353,7 @@
             document.body.style.overflow = '';
         }
         
-        // Form submission handling
+        
         document.getElementById('editItemForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -371,11 +369,11 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Show success message
+                    
                     alert(data.message);
-                    // Close modal
+                    
                     closeEditModal();
-                    // Reload page to see changes
+                    
                     location.reload();
                 } else {
                     alert(data.message || 'An error occurred');

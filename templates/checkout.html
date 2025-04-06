@@ -743,7 +743,7 @@
             justify-content: space-between;
         }
     }
-        
+
 
     
 </style>
@@ -920,7 +920,6 @@
     {% include 'footer.html' %}
 
     <script>
-        // Dark mode toggle
         const toggle = document.getElementById('darkModeToggle');
         const mobileToggle = document.getElementById('mobileDarkModeToggle');
       
@@ -945,7 +944,7 @@
         toggle.addEventListener('click', toggleDarkMode);
         mobileToggle.addEventListener('click', toggleDarkMode);
 
-        // Mobile menu functionality
+        
         const menuToggle = document.getElementById('menuToggle');
         const mobileMenu = document.getElementById('mobileMenu');
         const menuOverlay = document.getElementById('menuOverlay');
@@ -955,21 +954,17 @@
         menuToggle.addEventListener('click', function() {
             mobileMenu.classList.add('active');
             menuOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
+            document.body.style.overflow = 'hidden'; 
         });
         
         function closeMenu() {
             mobileMenu.classList.remove('active');
             menuOverlay.classList.remove('active');
-            document.body.style.overflow = ''; // Re-enable scrolling
+            document.body.style.overflow = ''; 
         }
-        
         mobileMenuClose.addEventListener('click', closeMenu);
         menuOverlay.addEventListener('click', closeMenu);
-        
-        // Mobile dropdown functionality
         clothesDropdown.addEventListener('click', function(e) {
-            // Prevent the click from closing the menu
             e.stopPropagation();
             this.classList.toggle('active');
         });
